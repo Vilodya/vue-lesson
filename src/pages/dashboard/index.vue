@@ -1,9 +1,5 @@
-<script setup>
-
-</script>
+<script setup></script>
 
 <template>
-  <div>
-    Dashboard
-  </div>
+  <div>Dashboard</div>
 </template>
