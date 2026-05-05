@@ -1,4 +1,5 @@
 <script setup>
+import { usePostStore } from "@/stores/post";
 import axios from "axios";
 import { onMounted, ref } from "vue";
 import { RouterLink } from "vue-router";
@@ -8,30 +9,10 @@ defineOptions({
 });
 
 onMounted(() => {
-  getPosts();
+  postStore.getPosts();
 });
 
-const posts = ref([]);
-
-const getPosts = function () {
-  axios
-    .get("http://localhost:3000/posts")
-    .then((res) => {
-      posts.value = res.data;
-    })
-    .catch()
-    .finally();
-};
-
-const deletePost = function (post) {
-  axios
-    .delete(`http://localhost:3000/posts/${post.id}`)
-    .then((res) => {
-      posts.value = post.value.filter((postItem) => postItem !== post);
-    })
-    .catch()
-    .finally();
-};
+const postStore = usePostStore();
 </script>
 
 <template>
@@ -66,7 +47,7 @@ const deletePost = function (post) {
             </tr>
           </thead>
           <tbody>
-            <tr v-for="post in posts">
+            <tr v-for="post in postStore.posts">
               <td class="bg-white border-b border-b-gray-200 text-left p-2">
                 {{ post.id }}
               </td>
@@ -100,7 +81,7 @@ const deletePost = function (post) {
                       />
                     </svg>
                   </router-link>
-                  <div @click="deletePost(post)">
+                  <div @click="postStore.deletePost(post)">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"

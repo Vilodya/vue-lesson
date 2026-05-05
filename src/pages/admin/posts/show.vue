@@ -1,28 +1,16 @@
 <script setup>
-import axios from "axios";
-import { onMounted, reactive, ref } from "vue";
-import { useRoute } from "vue-router";
+import { usePostStore } from "@/stores/post";
+import { onMounted } from "vue";
 
 defineOptions({
   name: "Show",
 });
 
 onMounted(() => {
-  getPost();
+  postStore.getPost();
 });
 
-const post = reactive({});
-const route = useRoute();
-
-const getPost = function () {
-  axios
-    .get(`http://localhost:3000/posts/${route.params.id}`)
-    .then((res) => {
-      Object.assign(post, res.data);
-    })
-    .catch()
-    .finally();
-};
+const postStore = usePostStore();
 </script>
 
 <template>
@@ -34,10 +22,10 @@ const getPost = function () {
       <div>
         <div class="bg-white border border-gray-200 p-4">
           <h3 class="text-xl">
-            {{ post.title }}
+            {{ postStore.postTitle }}
           </h3>
           <p class="mt-4 text-base">
-            {{ post.content }}
+            {{ postStore.post.content }}
           </p>
         </div>
       </div>

@@ -1,36 +1,15 @@
 <script setup>
-import axios from "axios";
-import { onMounted, reactive } from "vue";
-import { useRoute } from "vue-router";
+import { usePostStore } from "@/stores/post";
+import { onMounted } from "vue";
 
 defineOptions({
   name: "Edit",
 });
 
-const route = useRoute();
-const post = reactive({
-  title: "",
-  content: "",
-});
-
-const getPost = function () {
-  axios
-    .get(`http://localhost:3000/posts/${route.params.id}`)
-    .then((res) => {
-      Object.assign(post, res.data);
-    })
-    .catch()
-    .finally();
-};
-
-const updatePost = function () {
-  axios
-    .patch(`http://localhost:3000/posts/${route.params.id}`, post)
-    .then((res) => {});
-};
+const postStore = usePostStore();
 
 onMounted(() => {
-  getPost();
+  postStore.getPost();
 });
 </script>
 
@@ -39,7 +18,7 @@ onMounted(() => {
     <div class="bg-white border border-gray-200 p-4">
       <div>
         <input
-          v-model="post.title"
+          v-model="postStore.post.title"
           type="text"
           placeholder="title"
           class="border border-gray-200 p-4 w-full"
@@ -47,7 +26,7 @@ onMounted(() => {
       </div>
       <div class="mt-4">
         <textarea
-          v-model="post.content"
+          v-model="postStore.post.content"
           type="text"
           placeholder="content"
           class="border border-gray-200 p-4 w-full"
@@ -55,7 +34,7 @@ onMounted(() => {
       </div>
       <div class="mt-4">
         <a
-          @click.prevent="updatePost"
+          @click.prevent="postStore.updatePost"
           href="#"
           class="inline-block px-3 py-2 bg-sky-600 border border-sky-700 text-white"
           >Update Post</a

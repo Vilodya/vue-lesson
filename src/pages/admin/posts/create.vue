@@ -1,19 +1,17 @@
 <script setup>
 import axios from "axios";
-import { reactive } from "vue";
+import { usePostStore } from "@/stores/post";
+import { onMounted } from "vue";
 
 defineOptions({
   name: "Create",
 });
 
-const post = reactive({
-  title: "",
-  content: "",
+onMounted(() => {
+  postStore.post = {};
 });
 
-const storePost = function () {
-  axios.post("http://localhost:3000/posts", post).then();
-};
+const postStore = usePostStore();
 </script>
 
 <template>
@@ -21,7 +19,7 @@ const storePost = function () {
     <div class="bg-white border border-gray-200 p-4">
       <div>
         <input
-          v-model="post.title"
+          v-model="postStore.post.title"
           type="text"
           placeholder="title"
           class="border border-gray-200 p-4 w-full"
@@ -29,7 +27,7 @@ const storePost = function () {
       </div>
       <div class="mt-4">
         <textarea
-          v-model="post.content"
+          v-model="postStore.post.content"
           type="text"
           placeholder="content"
           class="border border-gray-200 p-4 w-full"
@@ -37,7 +35,7 @@ const storePost = function () {
       </div>
       <div class="mt-4">
         <a
-          @click.prevent="storePost"
+          @click.prevent="postStore.storePost"
           href="#"
           class="inline-block px-3 py-2 bg-sky-600 border border-sky-700 text-white"
           >Store Post</a
